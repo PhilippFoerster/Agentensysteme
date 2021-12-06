@@ -6,17 +6,8 @@ var (count2, matrix2) = await Utils.Import("Files/daten2B.txt");
 var (count3, matrix3) = await Utils.Import("Files/daten3A.txt");
 var (count4, matrix4) = await Utils.Import("Files/daten3B.txt");
 
-var agent1 = new Agent(matrix1);
-var agent2 = new Agent(matrix2);
-
-//var calc = new ValueCalculator();
-//var actions = calc.GetActions(1999, 100, 4, 20, new List<Agent> { agent1, agent2 });
-
-//Task.WaitAll(actions.Select(Task.Run).ToArray());
-//calc.PrintResult();
-////calc.TryBestAcceptRate(1000, 100);
-
-//Console.ReadKey();
+var agent1 = new Agent(matrix3);
+var agent2 = new Agent(matrix4);
 
 List<long> total = new();
 int i = 0;
@@ -26,7 +17,10 @@ while(!Console.KeyAvailable)
     agent1.Reset();
     agent2.Reset();
     var mediator = new Mediator(new List<Agent> { agent1, agent2 }, agent1.Matrix.Count);
-    var result = mediator.RunNegotiation(100);
+    //Hier kannst du die 2 verschiedenen Ansätze ausprobieren
+    var result = mediator.PickBest(200, mediator.BuildProposal); //Neuer Ansatz: Dynamisches zusammenbauen einer Lösung
+    //var result = mediator.PickBest(50, () => mediator.RunNegotiation(300, false)); //Alter Ansatz
+    //var result = mediator.RunNegotiation(300); //Eine einzelne Verhandlung
     var cost1 = Utils.CalculateCost(agent1.Matrix, result.Order);
     var cost2 = Utils.CalculateCost(agent2.Matrix, result.Order);
     var sum = cost1 + cost2;
@@ -40,7 +34,3 @@ Console.WriteLine($"Negotiations: {i}, Time: {stopWatch.Elapsed} - {stopWatch.El
 Console.WriteLine($"Average: {total.Sum() / i}");
 Console.WriteLine($"Min: {total.Min()}");
 Console.WriteLine($"Max: {total.Max()}");
-
-
-
-//var order1 = new List<int> { 2, 9, 4, 3, 7, 6, 0, 5, 8, 1 };

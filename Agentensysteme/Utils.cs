@@ -76,6 +76,7 @@ namespace Agentensysteme
         {
             return list.Count == 0 ? default : list[new Random().Next(0, list.Count)];
         }
+
         public static T TakeRandom<T>(this IList<T> list, List<T> except)
         {
             T elem = default;
@@ -86,11 +87,6 @@ namespace Agentensysteme
                     return elem;
             }
             return elem;
-        }
-
-        public static IEnumerable<T> TakePercent<T>(this IEnumerable<T> enumerable, double percent)
-        {
-            return enumerable.Take((int)(percent * enumerable.Count()) + 1);
         }
 
         public static bool Get5050()
